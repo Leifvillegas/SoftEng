@@ -46,8 +46,6 @@ public class User {
     @Min(1) @Max(5)
     private Integer socialLevel;
 
-    // ---------- Getters and Setters ----------
-
     public Long getId() {
         return id;
     }
