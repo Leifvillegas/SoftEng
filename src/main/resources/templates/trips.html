@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trips | TripTo</title>
+</head>
+<body>
+    <h1>Trips</h1>
+
+    <h3>Add a new Trip</h3>
+    <form th:action="@{/trips}" th:object="${trip}" method="post">
+        <label>Title:</label>
+        <input type="text" th:field="*{title}" required>
+        <br>
+
+        <label>Start Date:</label>
+        <input type="date" th:field="*{startDate}" required>
+        <br>
+
+        <label>End Date:</label>
+        <input type="date" th:field="*{endDate}" required>
+        <br>
+
+        <label>Destination:</label>
+        <select th:field="*{destination.id}" required>
+            <option value="" disabled selected>Select destination</option>
+            <option th:each="d : ${destinations}"
+                    th:value="${d.id}"
+                    th:text="|${d.name} - ${d.country}|">
+            </option>
+        </select>
+
+        <br>
+
+        <label>Notes (optional):</label>
+        <input type="text" th:field="*{notes}">
+        <br><br>
+
+        <button type="submit">Add Trip</button>
+    </form>
+
+    <hr>
+
+    <h3>Existing Trips</h3>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Destinations</th>
+            <th>Country</th>
+            <th>Notes</th>
+        </tr>
+        <tr th:each="t : ${trips}">
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.title}"></td>
+            <td th:text="${t.startDate}"></td>
+            <td th:text="${t.endDate}"></td>
+            <td th:text="${t.destination.name}"></td>
+            <td th:text="${t.destination.country}"></td>
+            <td th:text="${t.notes}"></td>
+            <td>
+                <form th:action="@{/trips/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${t.id}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <p><a href="/destinations">Go To Destinations</a></p>
+
+</body>
+</html>
