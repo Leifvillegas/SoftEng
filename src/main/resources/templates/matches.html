@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Suggested matches</title>
+</head>
+<body>
+
+<h2 th:text="'Suggested matches for ' + ${currentUser.name}"></h2>
+<p>
+    <strong>Your Personality: </strong>
+    <span th:text="${currentUser.personalityType}"></span>
+</p>
+
+<hr>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Personality</th>
+        <th>Interests</th>
+        <th>Languages</th>
+        <th>Compatibility</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="m : ${matches}">
+        <td th:text="${m.user.name}"></td>
+        <td th:text="${m.user.personalityType}"></td>
+        <td th:text="${m.user.interests}"></td>
+        <td th:text="${m.user.languages}"></td>
+        <td th:text="${m.scorePercent + '%'}"></td>
+    </tr>
+    </tbody>
+
+</table>
+
+</body>
+</html>

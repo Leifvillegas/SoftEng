@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Personality Result | TripTo</title>
+</head>
+<body>
+    <h1>Personality Result</h1>
+
+    <p th:text = "'Thanks, ' + ${name} + '!'"></p>
+    <p>
+        personality type for matching is:
+        <strong th:text="${personality}"></strong>
+    </p>
+
+    <p>You can now continue using the app (create trips, see matches, etc.).</p>
+
+    <p>
+        <a href="/">Home</a>
+        <a href="/trips">View Trips</a>
+        <a href="/matches/1">Example Matches</a>
+    </p>
+
+</body>
+</html>

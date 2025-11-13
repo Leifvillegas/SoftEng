@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Personality Test | TripTo</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 24px auto; }
+        h1 { margin-bottom: 8px; }
+        .q { margin: 18px 0; padding: 12px; background: #f7f7f7; border-radius: 8px; }
+        .scale { display: flex; gap: 18px; margin-top: 8px; flex-wrap: wrap; }
+        .scale label { display: inline-flex; align-items: center; gap: 6px; }
+        .actions { margin-top: 24px; }
+    </style>
+</head>
+<body>
+    <h1>Quick Personality Test</h1>
+    <p>Please answer all questions. 1 = Strongly Disagree, 5 = Strongly Agree.</p>
+    <form th:action="@{/personality_test}" method="post">
+        <input type="hidden" name="userId" th:value="${userId}">
+
+        <div class="q">
+            <strong>1) I get energinzed by being around people.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q1" value="1" required>1</label>
+                <label><input type="radio" name="q1" value="2">2</label>
+                <label><input type="radio" name="q1" value="3">3</label>
+                <label><input type="radio" name="q1" value="4">4</label>
+                <label><input type="radio" name="q1" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="q">
+            <strong>2) I like to plan trips in detail before I go.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q2" value="1" required>1</label>
+                <label><input type="radio" name="q2" value="2">2</label>
+                <label><input type="radio" name="q2" value="3">3</label>
+                <label><input type="radio" name="q2" value="4">4</label>
+                <label><input type="radio" name="q2" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="q">
+            <strong>3) I enjoy spontaneous adventures without a fixed plan.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q3" value="1" required>1</label>
+                <label><input type="radio" name="q3" value="2">2</label>
+                <label><input type="radio" name="q3" value="3">3</label>
+                <label><input type="radio" name="q3" value="4">4</label>
+                <label><input type="radio" name="q3" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="q">
+            <strong>4) I prefer quiet places over crowded tourist spots.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q4" value="1" required>1</label>
+                <label><input type="radio" name="q4" value="2">2</label>
+                <label><input type="radio" name="q4" value="3">3</label>
+                <label><input type="radio" name="q4" value="4">4</label>
+                <label><input type="radio" name="q4" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="q">
+            <strong>5) I enjoy meeting new people while traveling.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q5" value="1" required>1</label>
+                <label><input type="radio" name="q5" value="2">2</label>
+                <label><input type="radio" name="q5" value="3">3</label>
+                <label><input type="radio" name="q5" value="4">4</label>
+                <label><input type="radio" name="q5" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="q">
+            <strong>6) I’m willing to spend more for comfort and convenience.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q6" value="1" required>1</label>
+                <label><input type="radio" name="q6" value="2">2</label>
+                <label><input type="radio" name="q6" value="3">3</label>
+                <label><input type="radio" name="q6" value="4">4</label>
+                <label><input type="radio" name="q6" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="q">
+            <strong>7) I’m flexible with plans when unexpected things happen.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q7" value="1" required>1</label>
+                <label><input type="radio" name="q7" value="2">2</label>
+                <label><input type="radio" name="q7" value="3">3</label>
+                <label><input type="radio" name="q7" value="4">4</label>
+                <label><input type="radio" name="q7" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="q">
+            <strong>8) I prefer early starts and structured days over late nights.</strong>
+            <div class="scale">
+                <label><input type="radio" name="q8" value="1" required>1</label>
+                <label><input type="radio" name="q8" value="2">2</label>
+                <label><input type="radio" name="q8" value="3">3</label>
+                <label><input type="radio" name="q8" value="4">4</label>
+                <label><input type="radio" name="q8" value="5">5</label>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit">Submit Test</button>
+        </div>
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register | TripTo</title>
+</head>
+<body>
+<h1>Create an Account</h1>
+
+<p>Step 1 of 2: Basic info. After this, you’ll answer a short personality quiz.</p>
+
+<form th:action="@{/register}" th:object="${user}" method="post">
+
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" required><br>
+    <span style="color:red;" th:text="${nameError}"></span><br>
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" required><br>
+    <span style="color:red;" th:text="${emailError}"></span><br>
+
+    <label>Password:</label>
+    <input type="password" th:field="*{passwordHash}" required><br>
+    <span style="color:red;" th:text="${passwordError}"></span><br>
+
+    <label>Bio (optional):</label>
+    <input type="text" th:field="*{bio}" placeholder="Short about me"><br>
+
+    <label>Interests (optional):</label>
+    <input type="text" th:field="*{interests}" placeholder="e.g., hiking, photography"><br>
+
+    <label>Languages (optional):</label>
+    <input type="text" th:field="*{languages}" placeholder="e.g., English, Japanese"><br>
+
+    <label>Travel Style (optional):</label>
+    <input type="text" th:field="*{travelStyle}" placeholder="budget, luxury, etc."><br><br>
+
+    <button type="submit">Continue to Personality Test</button>
+</form>
+
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>
