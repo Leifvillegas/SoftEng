@@ -1,0 +1,79 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+}
+
+
+/* Suggestions Section */
+.suggestions {
+    max-width: 900px;
+    margin: 32px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.matchuser {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 16px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.matchuser:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+}
+
+.matchuser img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.matchuser h3 {
+    margin-bottom: 5px;
+}
+
+.matchuser p {
+    margin-bottom: 16px;
+    font-size: 16px;
+    color: #666;
+}
+
+.btnmatch {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btnmatch:hover {
+    background-color: #357ab8;
+}
+.btnloadmore {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 15px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btnloadmore:hover {
+    background-color: #357ab8;
+}
