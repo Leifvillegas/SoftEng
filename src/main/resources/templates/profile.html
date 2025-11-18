@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile | TripTo</title>
+</head>
+<body>
+
+<h1>Your Profile</h1>
+
+<div>
+    <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+
+    <p><strong>Bio:</strong>
+        <span th:text="${user.bio != null ? user.bio : 'No Bio yet'}"></span>
+    </p>
+
+    <p><strong>Interests:</strong>
+        <span th:text="${user.interests != null ? user.interests : 'No interests added'}"></span>
+    </p>
+
+    <p><strong>Languages:</strong>
+        <span th:text="${user.languages != null ? user.languages : 'No languages listed'}"></span>
+    </p>
+
+    <p><strong>Travel Style:</strong>
+        <span th:text="${user.travelStyle != null ? user.travelStyle : 'Not set'}"></span>
+    </p>
+
+    <p><strong>Personality Test:</strong>
+        <span th:text="${user.personalityType != null ? user.personalityType : 'Not taken yet'}"></span>
+    </p>
+
+    <p><strong>Subscription Tier:</strong>
+        <span th:text="${user.tier}"></span>
+        <span th:if="${user.tier == 'PREMIUM'}" style="color: green;">✔ Verified</span>
+    </p>
+
+</div>
+
+<br>
+
+<a href="/">Home</a> |
+<a th:href="@{'/matches/' + ${currentUserId}}">View Matches</a> |
+<a href="/trips">View Trips</a>
+
+</body>
+</html>
