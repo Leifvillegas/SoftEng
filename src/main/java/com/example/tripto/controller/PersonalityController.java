@@ -31,6 +31,23 @@ public class PersonalityController {
 
     }
 
+    @GetMapping("/personality_result")
+    public String showResult(@RequestParam Long userId, Model model) {
+
+        User user = userRepo.findById(userId).orElse(null);
+        if (user == null) {
+
+            return "redirect:/register";
+        }
+
+        model.addAttribute("name", user.getName());
+        model.addAttribute("personality", user.getPersonalityType());
+        model.addAttribute("userId", user.getId());
+
+        return "personality_result";
+    }
+
+
     @PostMapping("/personality_test")
     public String submitQuiz(
             @RequestParam Long userId,
@@ -61,10 +78,8 @@ public class PersonalityController {
         user.setPersonalityType(personalityLabel);
         userRepo.save(user);
 
-        model.addAttribute("name", user.getName());
-        model.addAttribute("personality", personalityLabel);
+        return "redirect:/personality_result?userId=" + userId;
 
-        return "personality_test";
 
     }
 

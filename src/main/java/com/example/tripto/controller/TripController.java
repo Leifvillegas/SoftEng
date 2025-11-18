@@ -4,12 +4,9 @@ import com.example.tripto.model.Trip;
 import com.example.tripto.model.Destination;
 import com.example.tripto.repository.DestinationRepository;
 import com.example.tripto.repository.TripRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class TripController {
@@ -22,42 +19,71 @@ public class TripController {
         this.destRepo = destRepo;
     }
 
+
     @GetMapping("/trips")
-    public String showTrips(Model model) {
-        var blank = new Trip();
+    public String showTrips(
+            @RequestParam(name = "userId", required = false) Long userId,
+            Model model
+    ) {
+        Trip blank = new Trip();
         blank.setDestination(new Destination());
 
+        model.addAttribute("trip", blank);
         model.addAttribute("trips", tripRepo.findAll());
-        model.addAttribute("trip", new Trip());
         model.addAttribute("destinations", destRepo.findAll());
+        model.addAttribute("userId", userId); // keep it in the model
+
         return "trips";
     }
 
-    @PostMapping("/trips")
-    public String createTrip(@Valid Trip trip, BindingResult result, Model model) {
-        if(trip.getStartDate() != null && trip.getEndDate() != null && trip.getStartDate().isAfter(trip.getEndDate())) {
-            result.rejectValue("endDate", "date.invalid", "End date must be on or after start date");
-        }
 
-        if(result.hasErrors()) {
+    @PostMapping("/trips")
+    public String createTrip(
+            @ModelAttribute Trip trip,
+            @RequestParam(name = "userId", required = false) Long userId,
+            Model model
+    ) {
+
+        if (trip.getStartDate() != null &&
+                trip.getEndDate() != null &&
+                trip.getStartDate().isAfter(trip.getEndDate())) {
+
+            model.addAttribute("error", "End date must be on or after start date");
             model.addAttribute("trips", tripRepo.findAll());
             model.addAttribute("destinations", destRepo.findAll());
+            model.addAttribute("userId", userId);
+            model.addAttribute("trip", trip);
+
             return "trips";
         }
 
-        if(trip.getDestination() != null && trip.getDestination().getId() != null) {
-            destRepo.findById(trip.getDestination().getId()).ifPresent(trip::setDestination);
+        if (trip.getDestination() != null && trip.getDestination().getId() != null) {
+            destRepo.findById(trip.getDestination().getId())
+                    .ifPresent(trip::setDestination);
+        } else {
+            trip.setDestination(null);
         }
 
         tripRepo.save(trip);
-        return "redirect:/trips";
 
+        if (userId != null) {
+            return "redirect:/matches/" + userId;
+        }
+
+        return "redirect:/trips";
     }
 
     @PostMapping("/trips/delete")
-    public String deleteTrip(Long id) {
+    public String deleteTrip(
+            @RequestParam Long id,
+            @RequestParam(name = "userId", required = false) Long userId
+    ) {
         tripRepo.deleteById(id);
+
+        if (userId != null) {
+            return "redirect:/trips?userId=" + userId;
+        }
+
         return "redirect:/trips";
     }
-
 }
