@@ -2,74 +2,87 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Trips | TripTo</title>
+    <title>Your Trips</title>
 </head>
 <body>
-    <h1>Trips</h1>
 
-    <h3>Add a new Trip</h3>
-    <form th:action="@{/trips}" th:object="${trip}" method="post">
+<h1>Your Trips</h1>
+
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<form th:action="@{/trips(userId=${userId})}" th:object="${trip}" method="post">
+
+    <label>Destination:</label>
+    <select th:field="*{destination.id}">
+        <form th:action="@{/trips(userId=${userId})}" th:object="${trip}" method="post">
+
         <label>Title:</label>
         <input type="text" th:field="*{title}" required>
-        <br>
-
-        <label>Start Date:</label>
-        <input type="date" th:field="*{startDate}" required>
-        <br>
-
-        <label>End Date:</label>
-        <input type="date" th:field="*{endDate}" required>
-        <br>
+        <br><br>
 
         <label>Destination:</label>
-        <select th:field="*{destination.id}" required>
-            <option value="" disabled selected>Select destination</option>
+        <select th:field="*{destination.id}">
+            <option value="">-- Select Destination --</option>
             <option th:each="d : ${destinations}"
                     th:value="${d.id}"
-                    th:text="|${d.name} - ${d.country}|">
+                    th:text="${d.name + ' (' + d.country + ')'}">
             </option>
         </select>
+        <br><br>
 
-        <br>
+        <label>Start Date:</label>
+        <input type="date" th:field="*{startDate}">
+        <br><br>
 
-        <label>Notes (optional):</label>
+        <label>End Date:</label>
+        <input type="date" th:field="*{endDate}">
+        <br><br>
+
+        <label>Notes:</label>
         <input type="text" th:field="*{notes}">
         <br><br>
 
-        <button type="submit">Add Trip</button>
+        <button type="submit">Create Trip</button>
     </form>
 
-    <hr>
+        <hr>
 
-    <h3>Existing Trips</h3>
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Destinations</th>
-            <th>Country</th>
-            <th>Notes</th>
-        </tr>
-        <tr th:each="t : ${trips}">
-            <td th:text="${t.id}"></td>
-            <td th:text="${t.title}"></td>
-            <td th:text="${t.startDate}"></td>
-            <td th:text="${t.endDate}"></td>
-            <td th:text="${t.destination.name}"></td>
-            <td th:text="${t.destination.country}"></td>
-            <td th:text="${t.notes}"></td>
-            <td>
-                <form th:action="@{/trips/delete}" method="post" style="display:inline;">
-                    <input type="hidden" name="id" th:value="${t.id}">
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+<h2>Existing Trips</h2>
 
-    <p><a href="/destinations">Go To Destinations</a></p>
+<table border="1" cellpadding="5" th:if="${!#lists.isEmpty(trips)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Destination</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Notes</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${trips}">
+        <td th:text="${t.id}"></td>
+        <td th:text="${t.destination != null ? t.destination.name : 'N/A'}"></td>
+        <td th:text="${t.startDate}"></td>
+        <td th:text="${t.endDate}"></td>
+        <td th:text="${t.notes}"></td>
+        <td>
+            <form th:action="@{/trips/delete(userId=${userId})}" method="post">
+                <input type="hidden" name="id" th:value="${t.id}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${#lists.isEmpty(trips)}">No trips found.</p>
+
+<br>
+
+<a href="/">Home</a>
+<a href="/destinations">View Destinations</a>
 
 </body>
 </html>

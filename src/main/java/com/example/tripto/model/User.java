@@ -42,4 +42,6 @@ public class User {
     private String travelStyle;
     private String personalityType;
 
+    private String tier;
+
 }

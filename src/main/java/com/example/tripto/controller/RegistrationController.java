@@ -34,15 +34,17 @@ public class RegistrationController {
             return "register";
         }
 
-        if(user.getEmail() != null && userRepo.existsByEmail(user.getEmail())) {
+        if(user.getEmail() == null || user.getEmail().trim().isEmpty()) {
             model.addAttribute("user", user);
-            model.addAttribute("emailError", "Email already exists!");
+            model.addAttribute("emailError", "Email is required");
             return "register";
         }
 
-        if (userRepo.existsByEmail(user.getEmail().trim())) {
+        String emailTrimmed = user.getEmail().trim();
+
+        if (userRepo.existsByEmail(emailTrimmed)) {
             model.addAttribute("user", user);
-            model.addAttribute("emailError", "Email is already registered");
+            model.addAttribute("emailError", "Email already exists");
             return "register";
         }
 
@@ -55,6 +57,28 @@ public class RegistrationController {
 
         String hashed = BCrypt.hashpw(raw, BCrypt.gensalt(10));
         user.setPasswordHash(hashed);
+
+        if (user.getBio() != null) {
+            user.setBio(user.getBio().trim());
+        }
+
+        if (user.getInterests() != null) {
+            user.setInterests(user.getInterests().trim());
+        }
+
+        if (user.getLanguages() != null) {
+            user.setLanguages(user.getLanguages().trim());
+        }
+
+        if (user.getTravelStyle() != null) {
+            user.setTravelStyle(user.getTravelStyle().trim());
+        }
+
+        if (user.getTier() == null || user.getTier().isBlank()) {
+            user.setTier("FREE");
+        }
+
+        user.setEmail(emailTrimmed);
 
         User saved = userRepo.save(user);
 
