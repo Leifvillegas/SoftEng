@@ -9,6 +9,24 @@
 <h1>Your Profile</h1>
 
 <div>
+    <div th:if="${user.profilePicture != null}">
+        <img th:src="@{'/uploads/' + ${user.profilePicture}}" alt="Profile Photo" width="150">
+    </div>
+
+    <div th:if="${user.profilePicture == null}">
+        <p>No profile picture uploaded. </p>
+    </div>
+
+    <form th:action="@{'/profile/' + ${user.id} + '/upload'}" method="post" enctype="multipart/form-data">
+        <input type="file" name="photo" required>
+        <button type="submit">Upload photo</button>
+    </form>
+
+</div>
+
+<hr>
+
+<div>
     <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
     <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
 
@@ -36,14 +54,19 @@
         <span th:text="${user.tier}"></span>
         <span th:if="${user.tier == 'PREMIUM'}" style="color: green;">✔ Verified</span>
     </p>
-
 </div>
 
 <br>
 
-<a href="/">Home</a> |
-<a th:href="@{'/matches/' + ${currentUserId}}">View Matches</a> |
-<a href="/trips">View Trips</a>
+<a th:href="@{'/profile/' + ${user.id} + '/edit'}">Edit Profile</a>
+
+<hr>
+
+<p>
+    <a href="/">Home</a> |
+    <a th:href="@{'/matches/' + ${user.id}}">View Matches</a> |
+    <a href="/trips">View Trips</a>
+</p>
 
 </body>
 </html>

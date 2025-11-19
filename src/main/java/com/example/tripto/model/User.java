@@ -44,6 +44,6 @@ public class User {
 
     private String tier;
 
-    private String profilePhotoPath;
+    private String profilePicture;
 
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile | TripTo</title>
+</head>
+<body>
+
+<h1>Edit Your Profile</h1>
+
+<form th:action="@{'/profile/' + ${user.id} + '/edit'}" method="post">
+
+    <p><strong>Name:</strong><br>
+        <input type="text" name="name" th:value="${user.name}" required>
+    </p>
+
+    <p><strong>Bio:</strong><br>
+        <textarea name="bio" rows="3" cols="40"
+                  th:text="${user.bio}"></textarea>
+    </p>
+
+    <p><strong>Interests:</strong><br>
+        <textarea name="interests" rows="3" cols="40"
+                  th:text="${user.interests}"></textarea>
+    </p>
+
+    <p><strong>Languages:</strong><br>
+        <input type="text" name="languages" th:value="${user.languages}">
+    </p>
+
+    <p><strong>Travel Style:</strong><br>
+        <input type="text" name="travelStyle" th:value="${user.travelStyle}">
+    </p>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br>
+
+<a th:href="@{'/profile/' + ${user.id}}">Cancel</a>
+
+</body>
+</html>
