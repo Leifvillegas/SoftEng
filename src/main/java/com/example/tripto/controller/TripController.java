@@ -93,6 +93,19 @@ public class TripController {
 
         }
 
+        Trip trip = tripRepo.findById(id).orElse(null);
+        if (trip == null) {
+
+            return "redirect:/trips/";
+
+        }
+
+        if (!currentUserId.equals(trip.getUserId())) {
+
+            return "redirect:/trips/";
+
+        }
+
         tripRepo.deleteById(id);
         return "redirect:/trips";
     }
@@ -109,6 +122,8 @@ public class TripController {
         if (trip == null) {
             return "redirect:/trips";
         }
+
+        if (!currentUserId.equals(trip.getUserId())) {}
 
         trip.setCompleted(true);
         tripRepo.save(trip);
