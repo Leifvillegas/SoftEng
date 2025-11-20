@@ -10,42 +10,38 @@
 
 <p th:if="${error}" th:text="${error}" style="color:red;"></p>
 
-<form th:action="@{/trips(userId=${userId})}" th:object="${trip}" method="post">
+<form th:action="@{/trips}" th:object="${trip}" method="post">
+
+    <label>Title:</label>
+    <input type="text" th:field="*{title}" required>
+    <br><br>
 
     <label>Destination:</label>
     <select th:field="*{destination.id}">
-        <form th:action="@{/trips(userId=${userId})}" th:object="${trip}" method="post">
+        <option value="">-- Select Destination --</option>
+        <option th:each="d : ${destinations}"
+                th:value="${d.id}"
+                th:text="${d.name + ' (' + d.country + ')'}">
+        </option>
+    </select>
+    <br><br>
 
-        <label>Title:</label>
-        <input type="text" th:field="*{title}" required>
-        <br><br>
+    <label>Start Date:</label>
+    <input type="date" th:field="*{startDate}">
+    <br><br>
 
-        <label>Destination:</label>
-        <select th:field="*{destination.id}">
-            <option value="">-- Select Destination --</option>
-            <option th:each="d : ${destinations}"
-                    th:value="${d.id}"
-                    th:text="${d.name + ' (' + d.country + ')'}">
-            </option>
-        </select>
-        <br><br>
+    <label>End Date:</label>
+    <input type="date" th:field="*{endDate}">
+    <br><br>
 
-        <label>Start Date:</label>
-        <input type="date" th:field="*{startDate}">
-        <br><br>
+    <label>Notes:</label>
+    <input type="text" th:field="*{notes}">
+    <br><br>
 
-        <label>End Date:</label>
-        <input type="date" th:field="*{endDate}">
-        <br><br>
+    <button type="submit">Create Trip</button>
+</form>
 
-        <label>Notes:</label>
-        <input type="text" th:field="*{notes}">
-        <br><br>
-
-        <button type="submit">Create Trip</button>
-    </form>
-
-        <hr>
+<hr>
 
 <h2>Existing Trips</h2>
 
@@ -57,7 +53,7 @@
         <th>Start</th>
         <th>End</th>
         <th>Notes</th>
-        <th>Delete</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -68,10 +64,26 @@
         <td th:text="${t.endDate}"></td>
         <td th:text="${t.notes}"></td>
         <td>
-            <form th:action="@{/trips/delete(userId=${userId})}" method="post">
+
+            <form th:action="@{/trips/delete}" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${t.id}">
                 <button type="submit">Delete</button>
             </form>
+
+            <form th:if="${!t.completed}"
+                  th:action="@{/trips/end}"
+                  method="post"
+                  style="display:inline; margin-left:5px;">
+                <input type="hidden" name="id" th:value="${t.id}">
+            </form>
+
+            <span th:if="${t.completed}">
+
+                <a th:href="@{'/trips/' + ${t.id} + '/rate'(userId=${userId})}">
+                    Rate Trip
+                </a>
+            </span>
+
         </td>
     </tr>
     </tbody>
@@ -83,6 +95,7 @@
 
 <a href="/">Home</a>
 <a href="/destinations">View Destinations</a>
+<a href="/logout">Logout</a>
 
 </body>
 </html>

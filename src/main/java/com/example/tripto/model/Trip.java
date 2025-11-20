@@ -31,4 +31,7 @@ public class Trip {
     private LocalDate endDate;
 
     private String notes;
+    private boolean completed;
+
+    private Long userId;
 }

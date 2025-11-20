@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rate Trip | TripTo</title>
+</head>
+<body>
+
+<h1>Rate Your Travel Buddy</h1>
+
+<p th:text="'Trip: ' + ${trip.title}">Trip title</p>
+
+<p th:text="'You are rating as: ' + ${rater.name}">Rater name</p>
+
+<form th:action="@{'/trips/' + ${trip.id} + '/rate'}"
+      th:object="${rating}"
+      method="post">
+
+    <input type="hidden" name="userId" th:value="${rater.id}"/>
+
+    <label for="ratedUserId">Travel buddy user ID:</label>
+    <input type="number" id="ratedUserId" name="ratedUserId" required>
+    <br><br>
+
+    <label for="score">Rating (1 to 5):</label>
+    <select id="score" th:field="*{score}">
+        <option value="1">1 - Very bad</option>
+        <option value="2">2 - Bad</option>
+        <option value="3">3 - Okay</option>
+        <option value="4">4 - Good</option>
+        <option value="5">5 - Excellent</option>
+    </select>
+    <br><br>
+
+    <p>Was this trip successful?</p>
+    <label>
+        <input type="radio" th:field="*{successful}" value="true"> Yes
+    </label>
+    <label>
+        <input type="radio" th:field="*{successful}" value="false"> No
+    </label>
+    <br><br>
+
+    <label for="comment">Comment:</label><br>
+    <textarea id="comment"
+              th:field="*{comment}"
+              rows="4"
+              cols="40"
+              placeholder="Write something about your experience"></textarea>
+    <br><br>
+
+    <button type="submit">Submit Rating</button>
+</form>
+
+<p>
+    <a th:href="@{'/trips'(userId=${rater.id})}">Back to My Trips</a>
+</p>
+
+</body>
+</html>

@@ -14,33 +14,49 @@
         No matches found yet.
     </p>
 
-<table th:if="${!#lists.isEmpty(matches)}" border="1" cellpadding="5">
-    <thead>
+    <table th:if="${!#lists.isEmpty(matches)}" border="1" cellpadding="5">
+        <thead>
         <tr>
             <th>Name</th>
+            <th>Photo</th>
             <th>Personality</th>
             <th>Interests</th>
             <th>Languages</th>
             <th>Travel Style</th>
             <th>Match %</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+
+        <tbody>
         <tr th:each="m : ${matches}">
             <td th:text="${m.user.name}"></td>
+
+            <td>
+                <img th:if="${m.user.profilePicture != null}"
+                     th:src="@{'/uploads/' + ${m.user.profilePicture}}"
+                     alt="Profile Photo"
+                     width="60" height="60">
+
+                <span th:if="${m.user.profilePicture == null}">
+                No photo
+            </span>
+            </td>
+
             <td th:text="${m.user.personalityType}"></td>
             <td th:text="${m.user.interests}"></td>
             <td th:text="${m.user.languages}"></td>
             <td th:text="${m.user.travelStyle}"></td>
             <td th:text="${m.score + '%'}"></td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
 
 <p>
     <a href="/">Home</a>
     <a href="/trips">View Trips</a>
     <a href="/destinations">View Destination</a>
+    <a href="/logout">Logout</a>
 </p>
 
 </body>

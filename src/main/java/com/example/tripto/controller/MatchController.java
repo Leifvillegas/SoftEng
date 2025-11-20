@@ -3,6 +3,7 @@ package com.example.tripto.controller;
 import com.example.tripto.model.User;
 import com.example.tripto.repository.UserRepository;
 import com.example.tripto.service.SimpleMatchService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +27,23 @@ public class MatchController {
     }
 
     @GetMapping("/matches/{userId}")
-    public String showMatches(@PathVariable Long userId, Model model) {
+    public String showMatches(@PathVariable Long userId, Model model, HttpSession session) {
 
-        User current =  userRepo.findById(userId).orElse(null);
+        Long currentUserId = (Long) session.getAttribute("currentUserId");
+        if (currentUserId == null) {
+
+            return "redirect:/login";
+
+        }
+
+
+        if (!currentUserId.equals(userId)) {
+
+            return "redirect:/matches/" + currentUserId;
+
+        }
+
+        User current = userRepo.findById(userId).orElse(null);
         if (current == null) {
 
             return "redirect:/register";
@@ -46,7 +61,6 @@ public class MatchController {
                 allResults.add(new MatchRow(other, score));
 
             }
-
         }
 
         allResults.sort(Comparator.comparingInt(MatchRow::score).reversed());
@@ -62,27 +76,20 @@ public class MatchController {
 
         } else {
 
-            if (allResults.size() > 3) {
-
-                visible = new ArrayList<>(allResults.subList(0, 3));
-
-            } else {
-
-                visible = allResults;
-
-            }
+            visible = (allResults.size() > 3) ? new ArrayList<>(allResults.subList(0, 3)) : allResults;
 
         }
 
-        model.addAttribute("currentUser",  current);
+        model.addAttribute("currentUser", current);
         model.addAttribute("matches", visible);
         model.addAttribute("isPremium", isPremium);
 
         return "matches";
-
     }
 
-    public record MatchRow (User user, int score) {
+    public record MatchRow(User user, int score) {
+
+
 
     }
 

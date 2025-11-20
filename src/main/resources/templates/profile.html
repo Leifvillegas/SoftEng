@@ -56,6 +56,47 @@
     </p>
 </div>
 
+<hr>
+
+<h2>Ratings</h2>
+
+<p th:if="${#lists.isEmpty(receivedRatings)}">
+    This user has not received any ratings yet.
+</p>
+
+<div th:if="${!#lists.isEmpty(receivedRatings)}">
+
+    <p>
+        Average rating:
+        <strong><span th:text="${#numbers.formatDecimal(averageScore, 1, 1)}">0.0</span> / 5</strong>
+    </p>
+
+    <p>
+        Successful trips:
+        <strong><span th:text="${#numbers.formatDecimal(successRate, 1, 1)}">0.0</span>%</strong>
+    </p>
+
+    <table border="1" cellpadding="5">
+        <thead>
+        <tr>
+            <th>From</th>
+            <th>Score</th>
+            <th>Successful?</th>
+            <th>Comment</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="rating : ${receivedRatings}">
+            <td th:text="${rating.rater.name}">Rater Name</td>
+            <td th:text="${rating.score}">5</td>
+            <td th:text="${rating.successful ? 'Yes' : 'No'}">Yes</td>
+            <td th:text="${rating.comment}">Great travel buddy!</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
 <br>
 
 <a th:href="@{'/profile/' + ${user.id} + '/edit'}">Edit Profile</a>
@@ -66,6 +107,7 @@
     <a href="/">Home</a> |
     <a th:href="@{'/matches/' + ${user.id}}">View Matches</a> |
     <a href="/trips">View Trips</a>
+    <a href="/logout">Logout</a>
 </p>
 
 </body>

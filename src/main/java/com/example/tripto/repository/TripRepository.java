@@ -3,6 +3,10 @@ package com.example.tripto.repository;
 import com.example.tripto.model.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface TripRepository extends JpaRepository<Trip, Long> {
+
+    List<Trip> findByUserId(Long userId);
 
 }
