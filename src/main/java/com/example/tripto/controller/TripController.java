@@ -2,22 +2,35 @@ package com.example.tripto.controller;
 
 import com.example.tripto.model.Trip;
 import com.example.tripto.model.Destination;
+import com.example.tripto.model.TripParticipant;
+import com.example.tripto.model.User;
 import com.example.tripto.repository.DestinationRepository;
+import com.example.tripto.repository.TripParticipantRepository;
 import com.example.tripto.repository.TripRepository;
+import com.example.tripto.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class TripController {
 
     private final TripRepository tripRepo;
     private final DestinationRepository destRepo;
+    private final TripParticipantRepository participantRepo;
+    private final UserRepository userRepo;
 
-    public TripController(TripRepository tripRepo, DestinationRepository destRepo) {
+    public TripController(TripRepository tripRepo, DestinationRepository destRepo, TripParticipantRepository participantRepo, UserRepository userRepo) {
+
         this.tripRepo = tripRepo;
         this.destRepo = destRepo;
+        this.participantRepo = participantRepo;
+        this.userRepo = userRepo;
+
     }
 
 
@@ -115,20 +128,103 @@ public class TripController {
 
         Long currentUserId = (Long) session.getAttribute("currentUserId");
         if (currentUserId == null) {
+
             return "redirect:/login";
+
         }
 
         Trip trip = tripRepo.findById(id).orElse(null);
         if (trip == null) {
+
             return "redirect:/trips";
+
         }
 
-        if (!currentUserId.equals(trip.getUserId())) {}
+        if (!currentUserId.equals(trip.getUserId())) {
+
+            return "redirect:/trips";
+
+        }
 
         trip.setCompleted(true);
         tripRepo.save(trip);
 
+        List<TripParticipant> participants = participantRepo.findByTripId(id);
+
+        TripParticipant firstAccepted = null;
+        for (TripParticipant tp : participants) {
+
+            if (tp.isAccepted()) {
+
+                firstAccepted = tp;
+                break;
+
+            }
+
+        }
+
+        if  (firstAccepted != null) {
+
+            Long buddyId = firstAccepted.getUser().getId();
+            return "redirect:/trips/" + id + "/rate?buddyId=" + buddyId;
+
+        }
+
         return "redirect:/trips";
+
+    }
+
+    @PostMapping("/trips/add-buddy")
+    public String addBuddyFromMatches(@RequestParam Long buddyId, HttpSession session, RedirectAttributes redirect) {
+
+        Long currentUserId = (Long) session.getAttribute("currentUserId");
+        if (currentUserId == null) {
+
+            return "redirect:/login";
+
+        }
+
+        List<Trip> myTrips = tripRepo.findByUserId(currentUserId);
+        if (myTrips.isEmpty()) {
+
+            redirect.addFlashAttribute("error", "Create a trip first before inviting a buddy");
+            return "redirect:/trips";
+
+        }
+
+        Trip target = null;
+        for (Trip t :  myTrips) {
+
+            if (!t.isCompleted()) {
+
+                target = t;
+                break;
+
+            }
+
+        }
+
+        if (target == null) {
+
+            target = myTrips.get(myTrips.size() - 1);
+
+        }
+
+        User buddy = userRepo.findById(buddyId).orElse(null);
+        if (buddy == null) {
+
+            redirect.addFlashAttribute("error", "buddy not found");
+            return "redirect:/trips";
+
+        }
+
+        TripParticipant tp = new TripParticipant();
+        tp.setTrip(target);
+        tp.setUser(buddy);
+        tp.setAccepted(false);
+
+        redirect.addFlashAttribute("message", "invite sent to your buddy");
+        return "redirect:/trips/";
 
     }
 

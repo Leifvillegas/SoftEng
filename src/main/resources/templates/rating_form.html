@@ -2,29 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Rate Trip | TripTo</title>
+    <title>Rate Trip Buddy</title>
 </head>
+
 <body>
 
 <h1>Rate Your Travel Buddy</h1>
 
-<p th:text="'Trip: ' + ${trip.title}">Trip title</p>
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+<p th:if="${message}" th:text="${message}" style="color:green;"></p>
 
-<p th:text="'You are rating as: ' + ${rater.name}">Rater name</p>
+<p>
+    <strong>Trip:</strong>
+    <span th:text="${trip.title}"></span>
+    (<span th:text="${trip.destination != null ? trip.destination.name : 'No destination'}"></span>)
+</p>
 
-<form th:action="@{'/trips/' + ${trip.id} + '/rate'}"
-      th:object="${rating}"
-      method="post">
+<p>
+    <strong>You (rater):</strong>
+    <span th:text="${rater.name}"></span>
+</p>
 
-    <input type="hidden" name="userId" th:value="${rater.id}"/>
+<form th:action="@{'/trips/' + ${trip.id} + '/rate'}" method="post">
 
-    <label for="ratedUserId">Travel buddy user ID:</label>
-    <input type="number" id="ratedUserId" name="ratedUserId" required>
+    <label for="buddyId"><strong>Who are you rating?</strong></label>
+    <select id="buddyId" name="buddyId" required>
+        <option value="">-- Select a user --</option>
+        <option th:each="b : ${buddies}"
+                th:value="${b.id}"
+                th:text="${b.name}">
+        </option>
+    </select>
     <br><br>
 
-    <label for="score">Rating (1 to 5):</label>
-    <select id="score" th:field="*{score}">
-        <option value="1">1 - Very bad</option>
+    <label><strong>Score (1–5):</strong></label>
+    <select name="score" required>
+        <option value="1">1 - Very Bad</option>
         <option value="2">2 - Bad</option>
         <option value="3">3 - Okay</option>
         <option value="4">4 - Good</option>
@@ -32,29 +45,24 @@
     </select>
     <br><br>
 
-    <p>Was this trip successful?</p>
-    <label>
-        <input type="radio" th:field="*{successful}" value="true"> Yes
-    </label>
-    <label>
-        <input type="radio" th:field="*{successful}" value="false"> No
-    </label>
+    <label><strong>Was this trip successful?</strong></label>
+    <select name="successful" required>
+        <option value="true">Yes - Good / enjoyable experience</option>
+        <option value="false">No - Bad experience / no-show, etc.</option>
+    </select>
     <br><br>
 
-    <label for="comment">Comment:</label><br>
-    <textarea id="comment"
-              th:field="*{comment}"
-              rows="4"
-              cols="40"
-              placeholder="Write something about your experience"></textarea>
+    <label><strong>Comment:</strong></label>
+    <br>
+    <textarea name="comment" rows="3" cols="40"
+              placeholder="Leave a comment (optional)"></textarea>
     <br><br>
 
     <button type="submit">Submit Rating</button>
 </form>
 
-<p>
-    <a th:href="@{'/trips'(userId=${rater.id})}">Back to My Trips</a>
-</p>
+<br>
+<a href="/trips">Back to Trips</a>
 
 </body>
 </html>

@@ -82,6 +82,7 @@ public class ProfileController {
         model.addAttribute("receivedRatings", receivedRatings);
         model.addAttribute("averageScore", averageScore);
         model.addAttribute("successRate", successRate);
+        model.addAttribute("currentUserId", currentUserId);
 
         return "profile";
 

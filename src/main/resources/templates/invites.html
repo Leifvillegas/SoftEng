@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trip Invites</title>
+</head>
+<body>
+
+<h1>Your Trip Invites</h1>
+
+<p th:if="${#lists.isEmpty(invites)}">
+    You have no pending invites.
+</p>
+
+<table th:if="${!#lists.isEmpty(invites)}" border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>From</th>
+        <th>Destination</th>
+        <th>Dates</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="inv : ${invites}">
+        <td>
+            <a th:href="@{'/profile/' + ${inv.fromUser.id}}"
+               th:text="${inv.fromUser.name}"></a>
+        </td>
+        <td th:text="${inv.trip.destination != null ? inv.trip.destination.name : 'N/A'}"></td>
+        <td th:text="${inv.trip.startDate} + ' → ' + ${inv.trip.endDate}"></td>
+        <td>
+            <form th:action="@{'/invites/' + ${inv.id} + '/respond'}" method="post" style="display:inline;">
+                <input type="hidden" name="action" value="accept">
+                <button type="submit">Accept</button>
+            </form>
+            <form th:action="@{'/invites/' + ${inv.id} + '/respond'}" method="post" style="display:inline; margin-left:5px;">
+                <input type="hidden" name="action" value="decline">
+                <button type="submit">Decline</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<br>
+<a href="/trips">Back to Trips</a>
+<a href="/logout">Logout</a>
+
+</body>
+</html>

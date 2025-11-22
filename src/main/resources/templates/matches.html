@@ -5,57 +5,64 @@
     <title>Suggested Matches</title>
 </head>
 <body>
-    <h1 th:text="'Suggested matches for ' + ${currentUser.name}"></h1>
+<h1 th:text="'Suggested matches for ' + ${currentUser.name}"></h1>
 
-    <p th:if="${isPremium}">You are a Premium user (showing all matches)</p>
-    <p th:if="${!isPremium}">You are a Free user (showing top 3 matches)</p>
+<p th:if="${isPremium}">You are a Premium user (showing all matches)</p>
+<p th:if="${!isPremium}">You are a Free user (showing top 3 matches)</p>
 
-    <p th:if="${#lists.isEmpty(matches)}">
-        No matches found yet.
-    </p>
+<p th:if="${#lists.isEmpty(matches)}">
+    No matches found yet.
+</p>
 
-    <table th:if="${!#lists.isEmpty(matches)}" border="1" cellpadding="5">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Photo</th>
-            <th>Personality</th>
-            <th>Interests</th>
-            <th>Languages</th>
-            <th>Travel Style</th>
-            <th>Match %</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="m : ${matches}">
-            <td th:text="${m.user.name}"></td>
-
-            <td>
-                <img th:if="${m.user.profilePicture != null}"
-                     th:src="@{'/uploads/' + ${m.user.profilePicture}}"
-                     alt="Profile Photo"
-                     width="60" height="60">
-
-                <span th:if="${m.user.profilePicture == null}">
+<table th:if="${!#lists.isEmpty(matches)}" border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Personality</th>
+        <th>Interests</th>
+        <th>Languages</th>
+        <th>Travel Style</th>
+        <th>Match %</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="m : ${matches}">
+        <td>
+            <img th:if="${m.user.profilePicture != null}"
+                 th:src="@{'/uploads/' + ${m.user.profilePicture}}"
+                 alt="Profile picture"
+                 width="60" height="60">
+            <span th:if="${m.user.profilePicture == null}">
                 No photo
             </span>
-            </td>
+        </td>
 
-            <td th:text="${m.user.personalityType}"></td>
-            <td th:text="${m.user.interests}"></td>
-            <td th:text="${m.user.languages}"></td>
-            <td th:text="${m.user.travelStyle}"></td>
-            <td th:text="${m.score + '%'}"></td>
-        </tr>
-        </tbody>
-    </table>
+        <td th:text="${m.user.name}"></td>
+        <td th:text="${m.user.personalityType}"></td>
+        <td th:text="${m.user.interests}"></td>
+        <td th:text="${m.user.languages}"></td>
+        <td th:text="${m.user.travelStyle}"></td>
+        <td th:text="${m.score + '%'}"></td>
 
+        <td>
+            <a th:href="@{'/chat/' + ${m.user.id}}">Message</a>
+
+            <form th:action="@{/invites/send}" method="post" style="display:inline; margin-left:5px;">
+                <input type="hidden" name="buddyId" th:value="${m.user.id}">
+                <button type="submit">Invite to my trip</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 <p>
     <a href="/">Home</a>
     <a href="/trips">View Trips</a>
     <a href="/destinations">View Destination</a>
+    <a href="/invites">My Invites</a>
     <a href="/logout">Logout</a>
 </p>
 

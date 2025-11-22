@@ -9,4 +9,8 @@ public interface TripParticipantRepository extends JpaRepository<TripParticipant
 
     List<TripParticipant> findByTripId(Long tripId);
 
+    List<TripParticipant> findByUserId(Long userId);
+
+    List<TripParticipant> findByUserIdAndAcceptedFalse (Long userId);
+
 }

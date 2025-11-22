@@ -53,6 +53,7 @@
         <th>Start</th>
         <th>End</th>
         <th>Notes</th>
+        <th>Status</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -63,8 +64,10 @@
         <td th:text="${t.startDate}"></td>
         <td th:text="${t.endDate}"></td>
         <td th:text="${t.notes}"></td>
-        <td>
 
+        <td th:text="${t.completed} ? 'Completed' : 'In progress'"></td>
+
+        <td>
             <form th:action="@{/trips/delete}" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${t.id}">
                 <button type="submit">Delete</button>
@@ -75,13 +78,11 @@
                   method="post"
                   style="display:inline; margin-left:5px;">
                 <input type="hidden" name="id" th:value="${t.id}">
+                <button type="submit">End Trip</button>
             </form>
 
-            <span th:if="${t.completed}">
-
-                <a th:href="@{'/trips/' + ${t.id} + '/rate'(userId=${userId})}">
-                    Rate Trip
-                </a>
+            <span th:if="${t.completed}" style="margin-left:5px;">
+                Trip already ended
             </span>
 
         </td>
